@@ -45,6 +45,7 @@
   tileReactions:
     - !type:CleanTileReaction {}
     - !type:CleanDecalsReaction {}
+  pricePerUnit: 2
 
 - type: reagent
   id: SoapReagent

@@ -16,6 +16,7 @@
         conditions:
         - !type:MetabolizerTypeCondition
           type: [Plant]
+  pricePerUnit: 3
 
 - type: reagent
   id: Left4Zed
