@@ -1,0 +1,100 @@
+- type: entity
+  name: Biogat Generator
+  description: |-
+    A slow ramping, disgusting generator, that runs off of biowaste.
+    There's a lot of carbon and methane in that crap though!
+  parent: PortableGeneratorSwitchableBase
+  id: BiogatGenerator
+  suffix: Biowaste, 30 kW
+  components:
+    - type: Sprite
+      layers:
+        - state: portgen0
+          map: [ "enum.GeneratorVisualLayers.Body" ]
+        - state: portgen_on_unlit
+          map: [ "enum.GeneratorVisualLayers.Unlit" ]
+          shader: unshaded
+          visible: false
+    - type: GenericVisualizer
+      visuals:
+        enum.GeneratorVisuals.Running:
+          enum.GeneratorVisualLayers.Body:
+            True: { state: portgen0on }
+            False: { state: portgen0 }
+          enum.GeneratorVisualLayers.Unlit:
+            True: { visible: true }
+            False: { visible: false }
+
+    - type: Machine
+      board: PortableGeneratorPacmanMachineCircuitboard
+    - type: FuelGenerator
+      minTargetPower: 30000
+      maxTargetPower: 30000
+      targetPower: 30000
+      optimalPower: 30000
+      # 15 minutes at max output
+      optimalBurnRate: 0.025
+      # a decent curve that goes up to about an hour at 5 kW.
+      fuelEfficiencyConstant: 0.025
+    - type: ChemicalFuelGeneratorAdapter
+      solution: tank
+      reagents:
+        Biowaste: 1
+    - type: SolutionContainerManager
+      solutions:
+        tank:
+          maxVol: 200
+    - type: RefillableSolution
+      solution: tank
+    - type: PortableGenerator
+      startChance: 1
+    - type: GeneratorExhaustGas
+      gasType: Ammonia
+      moleRatio: 30
+    - type: PowerMonitoringDevice
+      group: Generator
+      loadNodes:
+        - output_hv
+        - output_mv
+      sprite: Structures/Power/Generation/portable_generator.rsi
+      state: portgen0
+    - type: PowerSupplier
+      supplyRampRate: 25
+      supplyRampTolerance: 5000
+
+- type: entity
+  parent: [ DrinkBaseMaterialStrongPlastic, DrinkBase, DrinkVisualsFill ]
+  id: LiquidBarrel
+  name: Liquid Barrel
+  description: A massive barrel for hauling large amounts of liquids.
+  components:
+  - type: Edible
+    utensil: Spoon
+  - type: Sprite
+    sprite: Objects/Tools/bucket.rsi
+  - type: Item
+    size: Ginormous
+  - type: Clothing
+    sprite: Objects/Tools/bucket.rsi
+    slots:
+    - HEAD
+    quickEquip: false
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 2000
+  - type: SolutionTransfer
+    transferAmount: 100
+    maxTransferAmount: 100
+    minTransferAmount: 10
+  - type: SpillWhenWorn
+    solution: drink
+  - type: SolutionContainerVisuals
+    maxFillLevels: 3
+    inHandsFillBaseName: null
+  - type: Tag
+    tags:
+      - Bucket
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 500

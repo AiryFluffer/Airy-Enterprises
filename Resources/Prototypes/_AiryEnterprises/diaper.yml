@@ -62,10 +62,8 @@
         reagents:
         - ReagentId: SodiumPolyacrylate
           Quantity: 25
-        - ReagentId: EZNutrient
-          Quantity: 10
-        - ReagentId: Ammonia
-          Quantity: 15
+        - ReagentId: Biowaste
+          Quantity: 25
   - type: Extractable
     grindableSolutionName: food
   
@@ -152,3 +150,178 @@
         id: used_diaper
         amount: 30
 
+- type: reagent
+  id: Biowaste
+  name: Biowaste
+  desc: You know what happens after you eat and or drink? This is that.
+  physicalDesc: reagent-physical-desc-clumpy
+  color: "#692013"
+  boilingPoint: 1661.0
+  meltingPoint: 596.0
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 2
+
+- type: reaction
+  id: BiowasteBreakdown
+  source: true
+  requiredMixerCategories:
+  - Electrolysis
+  reactants:
+    Biowaste:
+      amount: 6
+  products:
+    EZNutrient: 2
+    Ammonia: 3
+    LiquidMaterium: 1
+  
+- type: entity
+  parent: ClothingHeadHelmetBase
+  id: DiaperHood
+  name: diaper hood
+  description: Giving a whole new meaning to the term butt head.
+  components:
+  - type: Sprite
+    sprite: _AiryEnterprises/diaper_hood.rsi
+  - type: Clothing
+    sprite: _AiryEnterprises/diaper_hood.rsi
+  - type: IngestionBlocker
+  - type: IdentityBlocker
+  - type: FlashImmunity
+  - type: EyeProtection
+  - type: Blindfold
+  - type: AddAccentClothing
+    accent: MumbleAccent
+  - type: EmoteBlocker
+    blocksCategories:
+    - Vocal
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+
+- type: entity
+  parent: ClothingMaskBase
+  id: Pacifier
+  name: binky
+  description: For soothing yourself or your friends.
+  components:
+  - type: Sprite
+    sprite: _AiryEnterprises/binky.rsi
+  - type: Item
+    size: Tiny
+    sprite: _AiryEnterprises/binky.rsi
+  - type: IngestionBlocker
+  - type: AddAccentClothing
+    accent: MumbleAccent
+  - type: EmoteBlocker
+    blocksCategories:
+    - Vocal
+  
+  # Need baby bottle sprite
+- type: entity
+  parent: DrinkCartonBaseFull
+  id: milkbottle
+  name: baby bottle
+  description: A bluespace baby bottle for the baby on the go.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Milk
+          Quantity: 30
+  - type: Sprite
+    sprite: _AiryEnterprises/baby_bottle.rsi
+  - type: Item
+    size: Small
+    sprite: _AiryEnterprises/baby_bottle.rsi
+  - type: SolutionRegeneration
+    solution: drink
+    generated:
+      reagents:
+      - ReagentId: Milk
+        Quantity: 0.2
+
+- type: reagent
+  id: LiquidMaterium
+  name: Materium
+  desc: A liquid slosh of materials. Try boiling it to get out impurities.
+  physicalDesc: reagent-physical-desc-metallic
+  color: "#9E727A"
+  boilingPoint: 1661.0
+  meltingPoint: 596.0
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Radiation: 1
+            Poison: 2
+
+- type: reaction
+  id: MateriumRefinement
+  impact: Low
+  quantized: true
+  minTemp: 374
+  reactants:
+    LiquidMaterium:
+      amount: 20
+  effects:
+    - !type:SpawnEntity
+      entity: Materium
+
+- type: entity
+  parent: BaseItem
+  id: Materium
+  name: materium slag
+  description: A wad of random materials. Throw it into the recycler to sort it out.
+  components:
+  - type: Sprite
+    sprite: _AiryEnterprises/sap.rsi
+    state: icon
+  - type: Item
+    size: Large
+    sprite: _AiryEnterprises/sap.rsi
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 500 # 15 sheets
+      Steel: 500 # DeltaV: 60 sheets, was 40
+      Plastic: 500 # DeltaV: 15 sheets, was 5
+      Gold: 150
+      Silver: 150
+      Uranium: 50 # DeltaV: 47 sheets, was 25
+      Plasma: 50 # DeltaV: 60 sheets, was 25
+
+- type: entity
+  parent: BaseFoodCondimentPacket
+  id: FoodCondimentPacketCaramex
+  name: caramexinin
+  description: A sweetener that negates theobromine for the fuzzy animals.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: Caramexinin
+          Quantity: 10
+  - type: Sprite
+    layers:
+      - state: packet-solid-2
+        map: ["enum.SolutionContainerLayers.Fill"]
+        visible: true
+      - state: packet-layer
+        map: ["enum.OpenableVisuals.Layer"]
+      - state: packet-label
+        color: black
+  - type: Icon
+    state: packet-salt
+  - type: Appearance
+  - type: SolutionContainerVisuals
+    maxFillLevels: 2
+    fillBaseName: packet-solid-
