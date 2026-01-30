@@ -1,0 +1,41 @@
+- type: microwaveMealRecipe
+  id: RecipeGochujangTofu
+  name: gochujang tofu recipe
+  result: FoodGochujangTofu
+  time: 15
+  group: Savory
+  reagents:
+    Sugar: 5
+    Hotsauce: 5
+  solids:
+    FoodTofuSlice: 1
+    FoodBowlBig: 1
+
+- type: entity
+  name: gochujang tofu
+  parent: EdibleBase
+  id: FoodGochujangTofu
+  description: A spicy space Korean tofu dish.
+  components:
+  - type: FlavorProfile
+    flavors:
+      - sweet
+      - spicy
+      - tofu
+  - type: Sprite
+    sprite: _AiryEnterprises/gochujang_tofu.rsi
+    state: icon
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 5
+        - ReagentId: Protein
+          Quantity: 5
+        - ReagentId: CapsaicinOil
+          Quantity: 2.5 # So you can eat two bowls without dying.
+  - type: Edible
+    trash:
+    - FoodBowlBig
